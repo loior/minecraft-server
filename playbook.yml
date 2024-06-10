@@ -1,0 +1,39 @@
+---
+- name: Setup Minecraft Server
+  hosts: all
+  become: yes
+  vars:
+    docker_image: "itzg/minecraft-server"
+  tasks:
+    - name: Update apt packages
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Run Minecraft server container
+      docker_container:
+        name: minecraft-server
+        image: "{{ docker_image }}"
+        state: started
+        restart_policy: unless-stopped
+        published_ports:
+          - "25565:25565"
+        env:
+          EULA: "TRUE"
+          VERSION: "LATEST"
+    
+    - name: Stop Minecraft server gracefully on shutdown
+      systemd:
+        name: docker.service
+        state: restarted
+      become: yes
