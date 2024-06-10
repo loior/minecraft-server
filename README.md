@@ -58,7 +58,7 @@ Then, run the script by typing:
         
 - The terraform script that runs is in `main.tf`.  
     - It configures a security group for the EC2 instance, which includes some inbound rules to allow SSH from any IP and to allow traffic from any IP on port 25565, which is the default port that Minecraft uses.  
-    - The terraform script also creates a key pair for the instance
+    - The terraform script also creates a key pair for the instance.
     - It then makes the instance, specifying the AMI ID, which is the ID for an Ubuntu "Server 24.04 LTS (HVM), SSD Volume Type" image, with a "t2.small" instance type, the security group made earlier, and the key pair made earlier. 
 
 - There is also a file called `outputs.tf` which specifies two things that should be output when the `main.tf` finishes running.  One is the public IP address of the EC2 instance that is created, and the other is the instance ID.  
@@ -69,18 +69,18 @@ Then, run the script by typing:
         terraform output
         ``` 
 
-Open up the `hosts.ini` file.  Replace the IP address in the beginning of line 2 with the IP address you just copied from the output of the configure script.  
+Open up the `hosts.ini` file.  Replace the bracket placeholder in the beginning of line 2 with the IP address you just copied from the output of the configure script.  
 
-Back in the terminal command line, you will now run the ansible playbook to set up the Minecraft server using the Docker image from itzg/minecraft-server, by typing: 
+Back in the terminal, you will now run the Ansible playbook to set up the Minecraft server using the Docker image from itzg/minecraft-server, by typing: 
 ``` 
 ansible-playbook playbook.yml -i hosts.ini
 ```
 
-- This runs the Ansible playbook that sets up the Minecraft server
+- This runs the Ansible playbook that sets up the Minecraft server.
 - The playbook first downloads Docker.  
-- It then runs the Minecraft server container based on the Docker image from this [page](https://hub.docker.com/r/itzg/minecraft-server).  
+- It then runs the Minecraft server container, which is from the Docker image on this [page](https://hub.docker.com/r/itzg/minecraft-server).  
 - It configures the server to restart if resources reboot, and makes sure that it gracefully shuts down as well.  
-- The `-i hosts.ini` part of the command tells the playbook to grab information from the inventory `hosts.ini` file, which includes the public IP address of the instance, the ansible_user, and the ansible_ssh_private_key_file
+- The `-i hosts.ini` part of the command tells the playbook to grab information from the inventory `hosts.ini` file, which includes the public IP address of the instance, the ansible_user, and the ansible_ssh_private_key_file.
 
 At one point, you may need to type `yes` to confirm that you want to continue connecting.  Go ahead and type `yes` if prompted.  This script may take a couple of minutes to run. 
 
@@ -89,7 +89,7 @@ After the script finishes, your Minecraft server should be set up and ready to p
 --- 
 
 ## How to connect to the Minecraft server once it's running
-You can test that the connection works by typing the following command in the terminal, using the same public IP address that you copied and pasted into the `hosts.ini` file: 
+You can test that the connection to the Minecraft server works by typing the following command in the terminal, using the same public IP address that you copied and pasted into the `hosts.ini` file: 
 ``` 
 nmap -sV -Pn -p T:25565 <public IP address>
 ```
